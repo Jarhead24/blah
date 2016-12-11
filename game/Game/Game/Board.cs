@@ -13,6 +13,9 @@ namespace Game
         public static int width;
         public static int numberOfRooms;
         private tiles[,] board;
+        public WALL_COLOR = ConsoleColor.Green;
+        public FLOOR_COLOR = ConsoleColor.DarkCyan;
+        public STAIR_COLOR = ConsoleColor.Red;
 
         List<RoomInfo> roomsCreated = new List<RoomInfo>();
 
