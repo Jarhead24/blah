@@ -13,9 +13,9 @@ namespace Game
         public static int width;
         public static int numberOfRooms;
         private tiles[,] board;
-        public WALL_COLOR = ConsoleColor.Green;
-        public FLOOR_COLOR = ConsoleColor.DarkCyan;
-        public STAIR_COLOR = ConsoleColor.Red;
+        public readonly tiles WALL_TILE = new tiles { Symbol = "#", Color = ConsoleColor.Green };
+        public readonly tiles FLOOR_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
+        public readonly tiles STAIR_TILE = new tiles { Symbol = ">", Color = ConsoleColor.Red };
 
         List<RoomInfo> roomsCreated = new List<RoomInfo>();
 
@@ -35,7 +35,7 @@ namespace Game
             {
                 for (int x = 0; x < width; x++)
                 {
-                    board[y, x] = new tiles { Symbol = "#", Color = ConsoleColor.Green };
+                    board[y, x] = WALL_TILE;
                 }
             }
             for (int i = 0; i < numberOfRooms; i++)
@@ -176,14 +176,14 @@ namespace Game
                     {
                         if (board[startRoom.yCenter, j].Symbol == "#")
                         {
-                            board[startRoom.yCenter, j].Symbol = ".";
+                            board[startRoom.yCenter, j] = FLOOR_TILE;
                         }
                     }
                     for (int j = Math.Min(destinationRoom.yCenter, startRoom.yCenter); j <= Math.Max(destinationRoom.yCenter, startRoom.yCenter); j++)
                     {
                         if (board[j, destinationRoom.xCenter].Symbol == "#")
                         {
-                            board[j, destinationRoom.xCenter].Symbol = ".";
+                            board[j, destinationRoom.xCenter] = FLOOR_TILE;
                         }
                     }
                 }
@@ -194,14 +194,14 @@ namespace Game
                     {
                         if (board[j, startRoom.xCenter].Symbol == "#")
                         {
-                            board[j, startRoom.xCenter].Symbol = ".";
+                            board[j, startRoom.xCenter] = FLOOR_TILE;
                         }
                     }
                     for (int j = Math.Min(destinationRoom.xCenter, startRoom.xCenter); j <= Math.Max(destinationRoom.xCenter, startRoom.xCenter); j++)
                     {
                         if (board[destinationRoom.yCenter, j].Symbol == "#")
                         {
-                            board[destinationRoom.yCenter, j].Symbol = ".";
+                            board[destinationRoom.yCenter, j] = FLOOR_TILE;
                         }
                     }
 
@@ -211,7 +211,7 @@ namespace Game
         private void drawStairs(RoomInfo room)
         {
             Random rand = new Random();
-            board[rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1), rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1)] = new tiles { Symbol = "<", Color = ConsoleColor.Red };
+            board[rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1), rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1)] = STAIR_TILE;
 
         }
         private void drawRoom(RoomInfo room)
@@ -220,8 +220,7 @@ namespace Game
             {
                 for (int x = room.xCenter - room.distanceRight; x <= room.xCenter + room.distanceRight; x++)
                 {
-                    board[y, x].Symbol = "." ;
-                    board[y, x].Color = ConsoleColor.DarkCyan;
+                    board[y, x] = FLOOR_TILE;
                 }
             }
         }
