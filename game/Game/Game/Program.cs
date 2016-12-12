@@ -14,6 +14,8 @@ namespace Game
             int inputHeight = 1;
             int numRooms = 0;
             int maxRooms = 99999999;
+            ConsoleKeyInfo keyInfo;
+
             while (inputWidth < 5)
             {
                 Console.Clear();
@@ -33,13 +35,38 @@ namespace Game
                 Console.WriteLine("Input number of rooms to attempt to create (Minimum of 1. Maximum of "+maxRooms+"): ");
                 Int32.TryParse(Console.ReadLine(), out numRooms);
             }
-            Console.SetWindowSize(inputWidth, inputHeight);
-            while (1 == 1) {
-                Console.Clear();
-                Board board = new Board(inputHeight, inputWidth, numRooms);
-                board.showBoard();
-                Console.ReadLine();
+            Console.SetWindowSize(inputWidth+10, inputHeight+5);
+            Console.Clear();
+            Board board = Board.Instance;
+            Player player = Player.Instance;
+            board.createBoard(inputHeight, inputWidth, numRooms);
+            board.showBoard();
+            while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+            {
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        player.moveUp();
+                        break;
+                    case ConsoleKey.DownArrow:
+                        player.moveDown();
+                        break;
+                    case ConsoleKey.RightArrow:
+                        player.moveRight();
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        player.moveLeft();
+                        break;
+                    default:
+                        break;
+                }            
             }
+            Environment.Exit(0);
+        }
+
+        private void gameLoop()
+        {
+
         }
     }
 }
