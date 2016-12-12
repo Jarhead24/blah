@@ -29,6 +29,7 @@ namespace Game
                 Int32.TryParse(Console.ReadLine(), out inputHeight);
             }
             maxRooms = (inputWidth - 2) * (inputHeight - 2) / 9;
+            maxRooms = Math.Min(maxRooms, 10);
             while (numRooms < 1 || numRooms > maxRooms)
             {
                 Console.Clear();

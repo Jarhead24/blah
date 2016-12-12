@@ -18,6 +18,7 @@ namespace Game
         public static int numberOfRooms;
         public static readonly tiles WALL_TILE = new tiles { Symbol = "#", Color = ConsoleColor.Green };
         public static readonly tiles FLOOR_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
+        public static readonly tiles HALL_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkMagenta };
         public static readonly tiles STAIR_TILE = new tiles { Symbol = ">", Color = ConsoleColor.Red };
 
         List<Room> roomsCreated = new List<Room>();
@@ -248,14 +249,14 @@ namespace Game
                     {
                         if (board[startRoom.yCenter, j].Symbol == WALL_TILE.Symbol)
                         {
-                            board[startRoom.yCenter, j] = FLOOR_TILE;
+                            board[startRoom.yCenter, j] = HALL_TILE;
                         }
                     }
                     for (int j = Math.Min(destinationRoom.yCenter, startRoom.yCenter); j <= Math.Max(destinationRoom.yCenter, startRoom.yCenter); j++)
                     {
                         if (board[j, destinationRoom.xCenter].Symbol == WALL_TILE.Symbol)
                         {
-                            board[j, destinationRoom.xCenter] = FLOOR_TILE;
+                            board[j, destinationRoom.xCenter] = HALL_TILE;
                         }
                     }
                 }
@@ -266,14 +267,14 @@ namespace Game
                     {
                         if (board[j, startRoom.xCenter].Symbol == WALL_TILE.Symbol)
                         {
-                            board[j, startRoom.xCenter] = FLOOR_TILE;
+                            board[j, startRoom.xCenter] = HALL_TILE;
                         }
                     }
                     for (int j = Math.Min(destinationRoom.xCenter, startRoom.xCenter); j <= Math.Max(destinationRoom.xCenter, startRoom.xCenter); j++)
                     {
                         if (board[destinationRoom.yCenter, j].Symbol == WALL_TILE.Symbol)
                         {
-                            board[destinationRoom.yCenter, j] = FLOOR_TILE;
+                            board[destinationRoom.yCenter, j] = HALL_TILE;
                         }
                     }
 
