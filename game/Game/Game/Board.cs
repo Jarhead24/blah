@@ -10,27 +10,29 @@ namespace Game
     class Board
     {
         private static Board instance = null;
+        private tiles[,] board;
+        private Random rand = null;
 
         public static int height;
         public static int width;
         public static int numberOfRooms;
-        private tiles[,] board;
-        public readonly tiles WALL_TILE = new tiles { Symbol = "#", Color = ConsoleColor.Green };
-        public readonly tiles FLOOR_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
-        public readonly tiles STAIR_TILE = new tiles { Symbol = ">", Color = ConsoleColor.Red };
+        public static readonly tiles WALL_TILE = new tiles { Symbol = "#", Color = ConsoleColor.Green };
+        public static readonly tiles FLOOR_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
+        public static readonly tiles STAIR_TILE = new tiles { Symbol = ">", Color = ConsoleColor.Red };
 
         List<Room> roomsCreated = new List<Room>();
 
+        /// <summary>
+        /// Board Construtor
+        /// </summary>
         public Board()
         {
+            rand = new Random(Environment.TickCount);
         }
 
         /// <summary>
-        /// Board Constructor
+        /// Makes/Returns board instance
         /// </summary>
-        /// <param name="h">board height</param>
-        /// <param name="w">board width</param>
-        /// <param name="numRooms">number of rooms on the board</param>
         public static Board Instance
         {
             // Singleton
@@ -47,6 +49,9 @@ namespace Game
         /// <summary>
         /// Calls the need functions to create the board
         /// </summary>
+        /// <param name="h">height of the board</param>
+        /// <param name="w">width of the board</param>
+        /// <param name="numRooms">number of rooms on the board</param>
         public void createBoard(int h, int w, int numRooms)
         {
             height = h;
@@ -65,7 +70,7 @@ namespace Game
             {
                 createRoom();
             }
-            Random rand = new Random();
+            
             int randStairsLoc = rand.Next(0, roomsCreated.Count);
             int randPlayerLoc = rand.Next(0, roomsCreated.Count);
             drawStairs(roomsCreated[randStairsLoc]);
@@ -81,7 +86,7 @@ namespace Game
         {
             Room newRoom = new Room();
             newRoom = defineCenterOfRoom(newRoom);
-            Random rand = new Random();
+            
             // How far out in each direction it goes. Not the actual height/width
             // -2 is because -1 to stay 1 away from edge and -1 because array ends at -1 width/height
             int roomHeight = rand.Next(1, getValidHeightOfRoom(newRoom));
@@ -98,8 +103,7 @@ namespace Game
         /// <param name="room">Random room to put player in</param>
         private void drawPlayer(Room room)
         {
-            Player player = Player.Instance;
-            Random rand = new Random();
+            Player player = Player.Instance;     
             int randomY = rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1);
             int randomX = rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1);
             player.xLocation = randomX;
@@ -115,7 +119,7 @@ namespace Game
         /// <returns>Returns a room now defined with a valid center.</returns>
         private Room defineCenterOfRoom(Room room)
         {
-            Random rand = new Random();
+            
             bool isCenterValid = false;
             int randHeight = 0;
             int randWidth = 0;
@@ -235,7 +239,7 @@ namespace Game
                 Room startRoom = roomsCreated[i];
                 Room destinationRoom = roomsCreated[i - 1];
                 // Random choose to go left/right first or up/down
-                Random rand = new Random();
+                
                 int randomDirection = rand.Next(0, 2);
                 // Right/Left first
                 if (randomDirection == 0)
@@ -283,9 +287,9 @@ namespace Game
         /// <param name="room">room to draw stairs in</param>
         private void drawStairs(Room room)
         {
-            Random rand = new Random();
-            board[rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1), rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1)] = STAIR_TILE;
-
+            int randomY = rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1);
+            int randomX = rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1);
+            board[randomY, randomX] = STAIR_TILE;
         }
 
         /// <summary>
