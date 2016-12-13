@@ -8,7 +8,6 @@ namespace Game
 {
     class Player
     {
-        
         public Tiles PlayerTile { get; }
         public int xLocation { get; set; }
         public int yLocation { get; set; }
@@ -20,10 +19,11 @@ namespace Game
         public string name { get; set; }
         public string background { get; set; }
         public string occupation { get; set; }
-
-        private Board board = Board.Instance;
         private static Player instance = null;
 
+        /// <summary>
+        /// Player constructor. Automatically randomizes all player info. 
+        /// </summary>
         public Player()
         {
             PlayerTile = new Tiles { Symbol = "@", Color = ConsoleColor.Cyan };
@@ -37,6 +37,9 @@ namespace Game
             this.defense = DieRoller.roll(6, 3) + DieRoller.roll(4, this.level);
         }
 
+        /// <summary>
+        /// Makes Player a singleton
+        /// </summary>
         public static Player Instance
         {
             // Singleton
@@ -50,14 +53,15 @@ namespace Game
             }
         }
 
-
-
         /// <summary>
         /// Move player up one space
         /// </summary>
         public void moveUp()
         {
-            board.movePlayer(xLocation, yLocation, xLocation, yLocation - 1, this);
+            LocationInformation newLoc = Board.Instance.movePlayer(xLocation, yLocation, xLocation, yLocation - 1);
+            this.CurrentTileOn = newLoc.tileOn;
+            this.xLocation = newLoc.xLocation;
+            this.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -65,7 +69,10 @@ namespace Game
         /// </summary>
         public void moveDown()
         {
-            board.movePlayer(xLocation, yLocation, xLocation, yLocation + 1, this);
+            LocationInformation newLoc = Board.Instance.movePlayer(xLocation, yLocation, xLocation, yLocation + 1);
+            this.CurrentTileOn = newLoc.tileOn;
+            this.xLocation = newLoc.xLocation;
+            this.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -73,7 +80,10 @@ namespace Game
         /// </summary>
         public void moveRight()
         {
-            board.movePlayer(xLocation, yLocation, xLocation + 1, yLocation, this);
+            LocationInformation newLoc = Board.Instance.movePlayer(xLocation, yLocation, xLocation + 1, yLocation);
+            this.CurrentTileOn = newLoc.tileOn;
+            this.xLocation = newLoc.xLocation;
+            this.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -81,7 +91,10 @@ namespace Game
         /// </summary>
         public void moveLeft()
         {
-            board.movePlayer(xLocation, yLocation, xLocation - 1, yLocation, this);
+            LocationInformation newLoc = Board.Instance.movePlayer(xLocation, yLocation, xLocation - 1, yLocation);
+            this.CurrentTileOn = newLoc.tileOn;
+            this.xLocation = newLoc.xLocation;
+            this.yLocation = newLoc.yLocation;
         }
     };
 }

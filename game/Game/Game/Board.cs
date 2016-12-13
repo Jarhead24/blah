@@ -9,10 +9,8 @@ namespace Game
 {
     class Board
     {
-        private static Board instance = null;
+        
         public Tiles[,] board;
-        private Random rand = null;
-
         public static int height;
         public static int width;
         public static int numberOfRooms;
@@ -21,7 +19,10 @@ namespace Game
         public static readonly Tiles HALL_TILE = new Tiles { Symbol = ".", Color = ConsoleColor.DarkMagenta };
         public static readonly Tiles STAIR_TILE = new Tiles { Symbol = ">", Color = ConsoleColor.Red };
 
-        List<Room> roomsCreated = new List<Room>();
+        private static Board instance = null;
+        private Player player = Player.Instance;
+        private Random rand = null;
+        private List<Room> roomsCreated = new List<Room>();
 
         /// <summary>
         /// Board Construtor
@@ -208,10 +209,11 @@ namespace Game
         /// <param name="destX"></param>
         /// <param name="destY"></param>
         /// <param name="player"></param>
-        public void movePlayer(int currX, int currY, int destX, int destY, Player player)
+        public LocationInformation movePlayer(int currX, int currY, int destX, int destY)
         {
             Tiles prevTile = player.CurrentTileOn;
             Tiles destTile = board[destY, destX];
+            LocationInformation locInfo = new LocationInformation(currX, currY, player.CurrentTileOn);
 
             //Check if destination is valid
             if (board[destY, destX].Symbol != WALL_TILE.Symbol)
@@ -224,11 +226,10 @@ namespace Game
                 Console.SetCursorPosition(destX, destY);
                 Console.ForegroundColor = player.PlayerTile.Color;
                 Console.Write(player.PlayerTile.Symbol);
-                player.yLocation = destY;
-                player.xLocation = destX;
-                player.CurrentTileOn = destTile;
+                locInfo.changeLocationInformation(destX, destY, destTile);
             }
             Console.SetCursorPosition(width, height);
+            return locInfo;
         }
     }
 }

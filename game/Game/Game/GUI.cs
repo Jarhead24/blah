@@ -11,6 +11,10 @@ namespace Game
         private static GUI instance = null;
         Player player = Player.Instance;
         Board board = Board.Instance;
+
+        /// <summary>
+        /// Makes GUI a singleton
+        /// </summary>
         public static GUI Instance
         {
             // Singleton
@@ -24,18 +28,53 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// Displays the player info at the bottom
+        /// </summary>
         public void displayPlayerInfo()
         {
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine(("Name: " + player.name).PadRight(Board.width));
-            Console.WriteLine(("Level " + player.level).PadRight(Board.width));
-            Console.WriteLine(("Health: " + player.health).PadRight(Board.width));
-            Console.WriteLine(("Attack: " + player.attack).PadRight(Board.width));
-            Console.WriteLine(("Defense: " + player.defense).PadRight(Board.width));
-            Console.WriteLine(("Job: " + player.occupation).PadRight(Board.width));
-            Console.WriteLine(("Background: " + player.background).PadRight(Board.width));
+            Console.WriteLine(splitLongLines("Name: " + player.name));
+            Console.WriteLine(splitLongLines("Level " + player.level));
+            Console.WriteLine(splitLongLines("Health: " + player.health));
+            Console.WriteLine(splitLongLines("Attack: " + player.attack));
+            Console.WriteLine(splitLongLines("Defense: " + player.defense));
+            Console.WriteLine(splitLongLines("Job: " + player.occupation));
+            Console.WriteLine(splitLongLines("Background: " + player.background));
             Console.BackgroundColor = ConsoleColor.Black;
+        }
+
+        /// <summary>
+        /// Splits long line to be multiple lines at the max width of the board
+        /// </summary>
+        /// <param name="line">Line to split</param>
+        /// <returns>String with split lines.</returns>
+        private string splitLongLines(string line)
+        {
+            StringBuilder newLine = new StringBuilder();
+            int lengthLimit = Board.width;
+            string[] lineToChars = line.Split(' ');
+
+            string fullLine = "";
+            foreach(string letter in lineToChars)
+            {
+                if((fullLine + letter).Length > lengthLimit)
+                {
+                    fullLine = fullLine.PadRight(lengthLimit);
+                    newLine.AppendLine(fullLine);
+                    fullLine = "";
+                }
+                fullLine += string.Format("{0} ", letter);
+            }
+
+            if (fullLine.Length > 0)
+            {
+                fullLine = fullLine.PadRight(lengthLimit);
+                newLine.AppendLine(fullLine);
+            }
+
+            return newLine.ToString();
         }
     }
 }

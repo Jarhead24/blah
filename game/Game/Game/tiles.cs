@@ -12,7 +12,5 @@ namespace Game
         public bool PlayerPostion { get; set; }
         public bool StairPostion { get; set; }
         public ConsoleColor Color { get; set;  }
-
-
     }
 }
