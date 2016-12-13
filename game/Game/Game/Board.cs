@@ -82,6 +82,34 @@ namespace Game
         }
 
         /// <summary>
+        /// Regenerates the dungeon with the already enter parameters
+        /// </summary>
+        public void regenerateBoard()
+        {
+            board = new Tiles[height, width];
+            roomsCreated.Clear();
+            // Make everything a #
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    board[y, x] = WALL_TILE;
+                }
+            }
+            for (int i = 0; i < numberOfRooms; i++)
+            {
+                createRoom();
+            }
+
+            int randStairsLoc = rand.Next(0, roomsCreated.Count);
+            int randPlayerLoc = rand.Next(0, roomsCreated.Count);
+            drawStairs(roomsCreated[randStairsLoc]);
+            drawPlayer(roomsCreated[randPlayerLoc]);
+            // Link rooms last so rooms only try and avoid drawing over other rooms (don't try and avoid drawing over hallways instead)
+            linkRooms();
+        }
+
+        /// <summary>
         /// Creates a random valid room on the board.
         /// </summary>
         private void createRoom()

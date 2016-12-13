@@ -10,14 +10,31 @@ namespace Game
     {
         static void Main(string[] args)
         {
+            generatePlayer();
+            generateDungeon();
+            drawInitialGUI();
+            gameLoop();
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// Generates the starting player and their info
+        /// </summary>
+        private static void generatePlayer()
+        {
+            Player player = new Player();
+        }
+        
+        /// <summary>
+        /// Generates the initial dungeon with the player in it
+        /// </summary>
+        private static void generateDungeon()
+        {
             int inputWidth = 1;
             int inputHeight = 1;
             int numRooms = 0;
             int maxRooms = 99999999;
-            ConsoleKeyInfo keyInfo;
             Board board = Board.Instance;
-            Player player = Player.Instance;
-            GUI gui = GUI.Instance;
 
             while (inputWidth < 5)
             {
@@ -36,40 +53,63 @@ namespace Game
             while (numRooms < 1 || numRooms > maxRooms)
             {
                 Console.Clear();
-                Console.WriteLine("Input number of rooms to attempt to create (Minimum of 1. Maximum of "+maxRooms+"): ");
+                Console.WriteLine("Input number of rooms to attempt to create (Minimum of 1. Maximum of " + maxRooms + "): ");
                 Int32.TryParse(Console.ReadLine(), out numRooms);
             }
-            Console.SetWindowSize(inputWidth+5, inputHeight+10);
+            Console.SetWindowSize(inputWidth + 5, inputHeight + 10);
             Console.Clear();
             board.createBoard(inputHeight, inputWidth, numRooms);
             board.showBoard();
-            gui.displayPlayerInfo();
+        }
+
+        /// <summary>
+        /// Draws the initial GUI
+        /// </summary>
+        private static void drawInitialGUI()
+        {
+            GUI.Instance.displayPlayerInfo();
+        }
+
+        /// <summary>
+        /// The main game loop.
+        /// </summary>
+        private static void gameLoop()
+        {
+            ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        player.moveUp();
+                        Player.Instance.moveUp();
                         break;
                     case ConsoleKey.DownArrow:
-                        player.moveDown();
+                        Player.Instance.moveDown();
                         break;
                     case ConsoleKey.RightArrow:
-                        player.moveRight();
+                        Player.Instance.moveRight();
                         break;
                     case ConsoleKey.LeftArrow:
-                        player.moveLeft();
+                        Player.Instance.moveLeft();
+                        break;
+                    case ConsoleKey.Enter:
+                        regenerateDungeon();
                         break;
                     default:
                         break;
-                }            
+                }
             }
-            Environment.Exit(0);
         }
 
-        private void gameLoop()
+        /// <summary>
+        /// Generates a new random dungeon
+        /// </summary>
+        private static void regenerateDungeon()
         {
-
+            Console.Clear();
+            Board.Instance.regenerateBoard();
+            Board.Instance.showBoard();
+            drawInitialGUI();
         }
     }
 }
