@@ -18,6 +18,9 @@ namespace Game
         public int distanceUp { get; set; }
         public int distanceRight { get; set; }
 
+        /// <summary>
+        /// Room constructor. Will automatically make a random valid room according to the current board.
+        /// </summary>
         public Room()
         {
             defineCenterOfRoom();
@@ -42,7 +45,7 @@ namespace Game
         /// <summary>
         /// Finds a valid spot for the center of a new room.
         /// </summary>
-        public void defineCenterOfRoom()
+        private void defineCenterOfRoom()
         {
             bool isCenterValid = false;
             int randHeight = 0;

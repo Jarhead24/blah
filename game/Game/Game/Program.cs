@@ -15,6 +15,9 @@ namespace Game
             int numRooms = 0;
             int maxRooms = 99999999;
             ConsoleKeyInfo keyInfo;
+            Board board = Board.Instance;
+            Player player = Player.Instance;
+            GUI gui = GUI.Instance;
 
             while (inputWidth < 5)
             {
@@ -36,12 +39,11 @@ namespace Game
                 Console.WriteLine("Input number of rooms to attempt to create (Minimum of 1. Maximum of "+maxRooms+"): ");
                 Int32.TryParse(Console.ReadLine(), out numRooms);
             }
-            Console.SetWindowSize(inputWidth+10, inputHeight+5);
+            Console.SetWindowSize(inputWidth+5, inputHeight+10);
             Console.Clear();
-            Board board = Board.Instance;
-            Player player = Player.Instance;
             board.createBoard(inputHeight, inputWidth, numRooms);
             board.showBoard();
+            gui.displayPlayerInfo();
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
                 switch (keyInfo.Key)

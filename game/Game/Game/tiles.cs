@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    class tiles
+    class Tiles
     {
         public string Symbol { get; set; }
         public bool PlayerPostion { get; set; }

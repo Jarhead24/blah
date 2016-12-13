@@ -10,16 +10,16 @@ namespace Game
     class Board
     {
         private static Board instance = null;
-        public tiles[,] board;
+        public Tiles[,] board;
         private Random rand = null;
 
         public static int height;
         public static int width;
         public static int numberOfRooms;
-        public static readonly tiles WALL_TILE = new tiles { Symbol = "#", Color = ConsoleColor.Green };
-        public static readonly tiles FLOOR_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
-        public static readonly tiles HALL_TILE = new tiles { Symbol = ".", Color = ConsoleColor.DarkMagenta };
-        public static readonly tiles STAIR_TILE = new tiles { Symbol = ">", Color = ConsoleColor.Red };
+        public static readonly Tiles WALL_TILE = new Tiles { Symbol = "#", Color = ConsoleColor.Green };
+        public static readonly Tiles FLOOR_TILE = new Tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
+        public static readonly Tiles HALL_TILE = new Tiles { Symbol = ".", Color = ConsoleColor.DarkMagenta };
+        public static readonly Tiles STAIR_TILE = new Tiles { Symbol = ">", Color = ConsoleColor.Red };
 
         List<Room> roomsCreated = new List<Room>();
 
@@ -58,7 +58,7 @@ namespace Game
             height = h;
             width = w;
             numberOfRooms = numRooms;
-            board = new tiles[h, w];
+            board = new Tiles[h, w];
             // Make everything a #
             for (int y = 0; y < height; y++)
             {
@@ -210,8 +210,8 @@ namespace Game
         /// <param name="player"></param>
         public void movePlayer(int currX, int currY, int destX, int destY, Player player)
         {
-            tiles prevTile = player.CurrentTileOn;
-            tiles destTile = board[destY, destX];
+            Tiles prevTile = player.CurrentTileOn;
+            Tiles destTile = board[destY, destX];
 
             //Check if destination is valid
             if (board[destY, destX].Symbol != WALL_TILE.Symbol)
