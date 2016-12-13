@@ -8,7 +8,7 @@ namespace Game
 {
     class Player
     {
-        public Tiles PlayerTile { get; }
+        public static readonly Tiles PLAYER_TILE = new Tiles { Symbol = "@", Color = ConsoleColor.Cyan };
         public int xLocation { get; set; }
         public int yLocation { get; set; }
         public Tiles CurrentTileOn { get; set; }
@@ -19,6 +19,7 @@ namespace Game
         public string name { get; set; }
         public string background { get; set; }
         public string occupation { get; set; }
+
         private static Player instance = null;
 
         /// <summary>
@@ -26,7 +27,6 @@ namespace Game
         /// </summary>
         public Player()
         {
-            PlayerTile = new Tiles { Symbol = "@", Color = ConsoleColor.Cyan };
             InfoGenerator infoGen = new InfoGenerator();
             this.name = infoGen.nameGenerator();
             this.background = infoGen.backgroundGenerator();

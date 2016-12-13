@@ -131,7 +131,7 @@ namespace Game
             player.xLocation = randomX;
             player.yLocation = randomY;
             player.CurrentTileOn = board[randomY, randomX];
-            board[randomY, randomX] = player.PlayerTile;
+            board[randomY, randomX] = Player.PLAYER_TILE;
         }
 
         /// <summary>
@@ -246,14 +246,14 @@ namespace Game
             //Check if destination is valid
             if (board[destY, destX].Symbol != WALL_TILE.Symbol)
             {
-                board[destY, destX] = player.PlayerTile;
+                board[destY, destX] = Player.PLAYER_TILE;
                 board[currY, currX] = player.CurrentTileOn;
                 Console.SetCursorPosition(currX, currY);
                 Console.ForegroundColor = prevTile.Color;
                 Console.Write(prevTile.Symbol);
                 Console.SetCursorPosition(destX, destY);
-                Console.ForegroundColor = player.PlayerTile.Color;
-                Console.Write(player.PlayerTile.Symbol);
+                Console.ForegroundColor = Player.PLAYER_TILE.Color;
+                Console.Write(Player.PLAYER_TILE.Symbol);
                 locInfo.changeLocationInformation(destX, destY, destTile);
             }
             Console.SetCursorPosition(width, height);
