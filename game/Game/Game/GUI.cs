@@ -35,13 +35,13 @@ namespace Game
         {
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine(splitLongLines("Name: " + player.name));
-            Console.WriteLine(splitLongLines("Level " + player.level));
-            Console.WriteLine(splitLongLines("Health: " + player.health));
-            Console.WriteLine(splitLongLines("Attack: " + player.attack));
-            Console.WriteLine(splitLongLines("Defense: " + player.defense));
-            Console.WriteLine(splitLongLines("Job: " + player.occupation));
-            Console.WriteLine(splitLongLines("Background: " + player.background));
+            Console.Write(splitLongLines("Name: " + player.name));
+            Console.Write(splitLongLines("Level " + player.level));
+            Console.Write(splitLongLines("Health: " + player.health));
+            Console.Write(splitLongLines("Attack: " + player.attack));
+            Console.Write(splitLongLines("Defense: " + player.defense));
+            Console.Write(splitLongLines("Job: " + player.occupation));
+            Console.Write(splitLongLines("Background: " + player.background));
             Console.BackgroundColor = ConsoleColor.Black;
         }
 
