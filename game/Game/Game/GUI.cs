@@ -12,6 +12,9 @@ namespace Game
         Player player = Player.Instance;
         Board board = Board.Instance;
 
+        private static readonly ConsoleColor guiBackgroundColor = ConsoleColor.DarkBlue;
+        private static readonly ConsoleColor guiTextColor = ConsoleColor.Gray;
+
         /// <summary>
         /// Makes GUI a singleton
         /// </summary>
@@ -33,8 +36,8 @@ namespace Game
         /// </summary>
         public void displayPlayerInfo()
         {
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = guiBackgroundColor;
+            Console.ForegroundColor = guiTextColor;
             Console.Write(splitLongLines("Name: " + player.name));
             Console.Write(splitLongLines("Level " + player.level));
             Console.Write(splitLongLines("Health: " + player.health));
@@ -42,6 +45,17 @@ namespace Game
             Console.Write(splitLongLines("Defense: " + player.defense));
             Console.Write(splitLongLines("Job: " + player.occupation));
             Console.Write(splitLongLines("Background: " + player.background));
+            Console.BackgroundColor = ConsoleColor.Black;
+        }
+
+        public void displayGameInfo()
+        {
+            Console.BackgroundColor = guiBackgroundColor;
+            Console.ForegroundColor = guiTextColor;
+            Console.Write(splitLongLines("Name: " + player.name));
+            Console.Write(splitLongLines("Health: " + player.health));
+            Console.Write(splitLongLines("Dungeon Level: " + GameInfoTracker.Instance.dungeonLevel));
+            Console.Write(splitLongLines("Score: " + GameInfoTracker.Instance.score));
             Console.BackgroundColor = ConsoleColor.Black;
         }
 

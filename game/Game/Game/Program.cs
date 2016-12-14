@@ -67,7 +67,7 @@ namespace Game
         /// </summary>
         private static void drawInitialGUI()
         {
-            GUI.Instance.displayPlayerInfo();
+            GUI.Instance.displayGameInfo();
         }
 
         /// <summary>
@@ -78,6 +78,7 @@ namespace Game
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
+                
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -97,6 +98,12 @@ namespace Game
                         break;
                     default:
                         break;
+                }
+                if (GameInfoTracker.Instance.currentLevelComplete)
+                {
+                    GameInfoTracker.Instance.levelComplete();
+                    GameInfoTracker.Instance.currentLevelComplete = false;
+                    regenerateDungeon();
                 }
             }
         }

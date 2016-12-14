@@ -75,6 +75,15 @@ namespace Game
             
             int randStairsLoc = rand.Next(0, roomsCreated.Count);
             int randPlayerLoc = rand.Next(0, roomsCreated.Count);
+
+            //To make sure the stairs and the player aren't placed in the same room
+            if (roomsCreated.Count > 1)
+            {
+                while (randPlayerLoc == randStairsLoc)
+                {
+                    randPlayerLoc = rand.Next(0, roomsCreated.Count);
+                }
+            }
             drawStairs(roomsCreated[randStairsLoc]);
             drawPlayer(roomsCreated[randPlayerLoc]);
             // Link rooms last so rooms only try and avoid drawing over other rooms (don't try and avoid drawing over hallways instead)
@@ -103,6 +112,15 @@ namespace Game
 
             int randStairsLoc = rand.Next(0, roomsCreated.Count);
             int randPlayerLoc = rand.Next(0, roomsCreated.Count);
+
+            //To make sure the stairs and the player aren't placed in the same room
+            if (roomsCreated.Count > 1)
+            {
+                while (randPlayerLoc == randStairsLoc)
+                {
+                    randPlayerLoc = rand.Next(0, roomsCreated.Count);
+                }
+            }
             drawStairs(roomsCreated[randStairsLoc]);
             drawPlayer(roomsCreated[randPlayerLoc]);
             // Link rooms last so rooms only try and avoid drawing over other rooms (don't try and avoid drawing over hallways instead)
@@ -230,13 +248,12 @@ namespace Game
         }
 
         /// <summary>
-        /// Handles moving and redrawing the player
+        /// Handles moving and redrawing the player and deciding if the level is complete
         /// </summary>
-        /// <param name="currX"></param>
-        /// <param name="currY"></param>
-        /// <param name="destX"></param>
-        /// <param name="destY"></param>
-        /// <param name="player"></param>
+        /// <param name="currX">Current x location</param>
+        /// <param name="currY">Current y location</param>
+        /// <param name="destX">Destination x location</param>
+        /// <param name="destY">Destination y location</param>
         public LocationInformation movePlayer(int currX, int currY, int destX, int destY)
         {
             Tiles prevTile = player.CurrentTileOn;
@@ -257,6 +274,10 @@ namespace Game
                 locInfo.changeLocationInformation(destX, destY, destTile);
             }
             Console.SetCursorPosition(width, height);
+            if (locInfo.tileOn.Symbol == STAIR_TILE.Symbol)
+            {
+                GameInfoTracker.Instance.currentLevelComplete = true;
+            }
             return locInfo;
         }
     }

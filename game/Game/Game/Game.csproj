@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Board.cs" />
     <Compile Include="DieRoller.cs" />
+    <Compile Include="GameInfoTracker.cs" />
     <Compile Include="GUI.cs" />
     <Compile Include="InfoGenerator.cs" />
     <Compile Include="LocationInformation.cs" />
