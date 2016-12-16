@@ -18,7 +18,7 @@ namespace Game
             string lastn = nameLast[DieRoller.roll(nameLast.Length) - 1];
             string sire = nameTitle[DieRoller.roll(nameTitle.Length) - 1];
 
-            return firstn + lastn + " " + sire;
+            return firstn + lastn + sire;
         }
 
         public string backgroundGenerator()

@@ -31,12 +31,14 @@ namespace Game
             BaseStats["Strength"] = Strength;
             BaseStats["Dexterity"] = Dexterity;
             BaseStats["Constitution"] = Constitution;
+            BaseStats["Luck"] = Luck;
         }
         protected virtual bool RefreshStats()
         {
             Strength = BaseStats["Strength"];
             Dexterity = BaseStats["Dexterity"];
             Constitution = BaseStats["Constitution"];
+            Luck = BaseStats["Luck"];
             foreach (EffectParameter Effect in Effects)
             {
                 //apply effect (NOT IMPLEMENTED)

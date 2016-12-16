@@ -34,14 +34,15 @@ namespace Game
         /// <summary>
         /// Displays the player info at the bottom of dungeon
         /// </summary>
-        public void displayGameInfo()
+        public void displayGameInfo(PlayerCharacter p)
         {
             Console.BackgroundColor = guiBackgroundColor;
             Console.ForegroundColor = guiTextColor;
-            Console.Write(splitLongLines("Name: " + player.Name));
-            Console.Write(splitLongLines("Health: " + player.HP));
+            Console.Write(splitLongLines("Name: " + p.Name));
+            Console.Write(splitLongLines("Health: " + p.HP));
             Console.Write(splitLongLines("Dungeon Level: " + GameInfoTracker.Instance.dungeonLevel));
             Console.Write(splitLongLines("Score: " + GameInfoTracker.Instance.score));
+            Console.Write(splitLongLines("Press Escape to Return to Town"));
             Console.BackgroundColor = ConsoleColor.Black;
         }
 

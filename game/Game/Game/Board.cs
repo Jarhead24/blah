@@ -23,7 +23,7 @@ namespace Game
         public ConsoleColor BackColor { get; set; }
 
         private static Board instance = null;
-        private PlayerCharacter player = PlayerCharacter.Instance;
+        private PlayerCharacter player;
         private Random rand = null;
         private List<Room> roomsCreated = new List<Room>();
 
@@ -149,7 +149,6 @@ namespace Game
         /// <param name="room">Random room to put player in</param>
         private void drawPlayer(Room room)
         {
-            PlayerCharacter player = PlayerCharacter.Instance;     
             int randomY = rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1);
             int randomX = rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1);
             player.xLocation = randomX;
@@ -297,6 +296,7 @@ namespace Game
 
         public bool Enter(PlayerCharacter p)
         {
+            player = p;
             ConsoleKeyInfo keyInfo;
             Console.Clear();
             if(this.board == null)
@@ -304,7 +304,7 @@ namespace Game
                 this.createBoard(30, 100, 2);
             }
             this.showBoard();
-            drawInitialGUI();
+            drawInitialGUI(p);
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
 
@@ -341,11 +341,10 @@ namespace Game
         /// </summary>
         public void moveUp()
         {
-            PlayerCharacter p = PlayerCharacter.Instance;
-            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation, p.yLocation - 1);
-            p.CurrentTileOn = newLoc.tileOn;
-            p.xLocation = newLoc.xLocation;
-            p.yLocation = newLoc.yLocation;
+            LocationInformation newLoc = movePlayer(player.xLocation, player.yLocation, player.xLocation, player.yLocation - 1);
+            player.CurrentTileOn = newLoc.tileOn;
+            player.xLocation = newLoc.xLocation;
+            player.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -353,11 +352,10 @@ namespace Game
         /// </summary>
         public void moveDown()
         {
-            PlayerCharacter p = PlayerCharacter.Instance;
-            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation, p.yLocation + 1);
-            p.CurrentTileOn = newLoc.tileOn;
-            p.xLocation = newLoc.xLocation;
-            p.yLocation = newLoc.yLocation;
+            LocationInformation newLoc = movePlayer(player.xLocation, player.yLocation, player.xLocation, player.yLocation + 1);
+            player.CurrentTileOn = newLoc.tileOn;
+            player.xLocation = newLoc.xLocation;
+            player.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -365,11 +363,10 @@ namespace Game
         /// </summary>
         public void moveRight()
         {
-            PlayerCharacter p = PlayerCharacter.Instance;
-            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation + 1, p.yLocation);
-            p.CurrentTileOn = newLoc.tileOn;
-            p.xLocation = newLoc.xLocation;
-            p.yLocation = newLoc.yLocation;
+            LocationInformation newLoc = movePlayer(player.xLocation, player.yLocation, player.xLocation + 1, player.yLocation);
+            player.CurrentTileOn = newLoc.tileOn;
+            player.xLocation = newLoc.xLocation;
+            player.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -377,11 +374,10 @@ namespace Game
         /// </summary>
         public void moveLeft()
         {
-            PlayerCharacter p = PlayerCharacter.Instance;
-            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation - 1, p.yLocation);
-            p.CurrentTileOn = newLoc.tileOn;
-            p.xLocation = newLoc.xLocation;
-            p.yLocation = newLoc.yLocation;
+            LocationInformation newLoc = movePlayer(player.xLocation, player.yLocation, player.xLocation - 1, player.yLocation);
+            player.CurrentTileOn = newLoc.tileOn;
+            player.xLocation = newLoc.xLocation;
+            player.yLocation = newLoc.yLocation;
         }
 
         /// <summary>
@@ -392,15 +388,15 @@ namespace Game
             Console.Clear();
             regenerateBoard(Math.Min(10,GameInfoTracker.Instance.dungeonLevel+1));
             showBoard();
-            drawInitialGUI();
+            drawInitialGUI(player);
         }
 
         /// <summary>
         /// Draws the initial GUI
         /// </summary>
-        private void drawInitialGUI()
+        private void drawInitialGUI(PlayerCharacter p)
         {
-            GUI.Instance.displayGameInfo();
+            GUI.Instance.displayGameInfo(p);
         }
     }
 }
