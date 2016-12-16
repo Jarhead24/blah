@@ -10,113 +10,44 @@ namespace Game
     {
         static void Main(string[] args)
         {
-            generatePlayer();
-            generateDungeon();
-            drawInitialGUI();
-            gameLoop();
-            Environment.Exit(0);
-        }
+            Console.SetWindowSize(110, 40);
 
-        /// <summary>
-        /// Generates the starting player and their info
-        /// </summary>
-        private static void generatePlayer()
-        {
-            Player player = new Player();
-        }
-        
-        /// <summary>
-        /// Generates the initial dungeon with the player in it
-        /// </summary>
-        private static void generateDungeon()
-        {
-            int inputWidth = 1;
-            int inputHeight = 1;
-            int numRooms = 0;
-            int maxRooms = 99999999;
-            Board board = Board.Instance;
-
-            while (inputWidth < 5)
+            PlayerCharacter Player = new PlayerCharacter()
             {
-                Console.Clear();
-                Console.WriteLine("Input dungeon width (Minimum of 5): ");
-                Int32.TryParse(Console.ReadLine(), out inputWidth);
-            }
-            while (inputHeight < 5)
-            {
-                Console.Clear();
-                Console.WriteLine("Input dungeon height (Minimum of 5): ");
-                Int32.TryParse(Console.ReadLine(), out inputHeight);
-            }
-            maxRooms = (inputWidth - 2) * (inputHeight - 2) / 9;
-            maxRooms = Math.Min(maxRooms, 10);
-            while (numRooms < 1 || numRooms > maxRooms)
-            {
-                Console.Clear();
-                Console.WriteLine("Input number of rooms to attempt to create (Minimum of 1. Maximum of " + maxRooms + "): ");
-                Int32.TryParse(Console.ReadLine(), out numRooms);
-            }
-            Console.SetWindowSize(inputWidth + 5, inputHeight + 10);
-            Console.Clear();
-            board.createBoard(inputHeight, inputWidth, numRooms);
-            board.showBoard();
-        }
+                Name = CreatureBuilder.GetName(),
+                Money = 9001,
+                Hunger = 80,
+                Strength = DieRoller.roll(3, 6),
+                Dexterity = DieRoller.roll(3, 6),
+                Constitution = DieRoller.roll(3, 6),
+                Luck = DieRoller.roll(1, 6)
+            };
 
-        /// <summary>
-        /// Draws the initial GUI
-        /// </summary>
-        private static void drawInitialGUI()
-        {
-            GUI.Instance.displayGameInfo();
-        }
+            Player.HP = DieRoller.roll(Player.Constitution);
 
-        /// <summary>
-        /// The main game loop.
-        /// </summary>
-        private static void gameLoop()
-        {
-            ConsoleKeyInfo keyInfo;
-            while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
-            {
-                
-                switch (keyInfo.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        Player.Instance.moveUp();
-                        break;
-                    case ConsoleKey.DownArrow:
-                        Player.Instance.moveDown();
-                        break;
-                    case ConsoleKey.RightArrow:
-                        Player.Instance.moveRight();
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        Player.Instance.moveLeft();
-                        break;
-                    case ConsoleKey.Enter:
-                        regenerateDungeon();
-                        break;
-                    default:
-                        break;
-                }
-                if (GameInfoTracker.Instance.currentLevelComplete)
-                {
-                    GameInfoTracker.Instance.levelComplete();
-                    GameInfoTracker.Instance.currentLevelComplete = false;
-                    regenerateDungeon();
-                }
-            }
-        }
+            //add buildings to Towns
+            LocationMap Town1 = new LocationMap() { Name = "Peasantville" };
+            //Town1.AddLocation(new Sage());
+            //Town1.AddLocation(new WizardTower());
+            //Town1.AddLocation(new Blacksmith());
+            //Town1.AddLocation(new Barracks());
 
-        /// <summary>
-        /// Generates a new random dungeon
-        /// </summary>
-        private static void regenerateDungeon()
-        {
-            Console.Clear();
-            Board.Instance.regenerateBoard();
-            Board.Instance.showBoard();
-            drawInitialGUI();
+            LocationMap Town2 = new LocationMap() { Name = "Poorburg" };
+            //Town2.AddLocation(new Church());
+            Town2.AddLocation(new Tavern());
+            //Town2.AddLocation(new Stables());
+            //Town2.AddLocation(new Alchemist());
+            Town2.AddLocation(new Board());
+
+            //add Towns to Main Map
+            LocationMap MainMap = new LocationMap() { Name = "Main Menu" };
+            MainMap.AddLocation(Town1);
+            MainMap.AddLocation(Town2);
+
+            //function for entering locations
+            MainMap.Enter(Player);
+
+            Console.ReadKey();
         }
     }
 }

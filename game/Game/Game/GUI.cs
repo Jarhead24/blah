@@ -9,7 +9,7 @@ namespace Game
     class GUI
     {
         private static GUI instance = null;
-        Player player = Player.Instance;
+        PlayerCharacter player = PlayerCharacter.Instance;
         Board board = Board.Instance;
 
         private static readonly ConsoleColor guiBackgroundColor = ConsoleColor.DarkBlue;
@@ -32,28 +32,14 @@ namespace Game
         }
 
         /// <summary>
-        /// Displays the player info at the bottom
+        /// Displays the player info at the bottom of dungeon
         /// </summary>
-        public void displayPlayerInfo()
-        {
-            Console.BackgroundColor = guiBackgroundColor;
-            Console.ForegroundColor = guiTextColor;
-            Console.Write(splitLongLines("Name: " + player.name));
-            Console.Write(splitLongLines("Level " + player.level));
-            Console.Write(splitLongLines("Health: " + player.health));
-            Console.Write(splitLongLines("Attack: " + player.attack));
-            Console.Write(splitLongLines("Defense: " + player.defense));
-            Console.Write(splitLongLines("Job: " + player.occupation));
-            Console.Write(splitLongLines("Background: " + player.background));
-            Console.BackgroundColor = ConsoleColor.Black;
-        }
-
         public void displayGameInfo()
         {
             Console.BackgroundColor = guiBackgroundColor;
             Console.ForegroundColor = guiTextColor;
-            Console.Write(splitLongLines("Name: " + player.name));
-            Console.Write(splitLongLines("Health: " + player.health));
+            Console.Write(splitLongLines("Name: " + player.Name));
+            Console.Write(splitLongLines("Health: " + player.HP));
             Console.Write(splitLongLines("Dungeon Level: " + GameInfoTracker.Instance.dungeonLevel));
             Console.Write(splitLongLines("Score: " + GameInfoTracker.Instance.score));
             Console.BackgroundColor = ConsoleColor.Black;

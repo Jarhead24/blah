@@ -43,18 +43,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alchemist.cs" />
+    <Compile Include="Barracks.cs" />
+    <Compile Include="Blacksmith.cs" />
     <Compile Include="Board.cs" />
+    <Compile Include="BuildingLocation.cs" />
+    <Compile Include="Character.cs" />
+    <Compile Include="Church.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="Creature.cs" />
+    <Compile Include="CreatureBuilder.cs" />
     <Compile Include="DieRoller.cs" />
+    <Compile Include="EquipItem.cs" />
+    <Compile Include="FoodItem.cs" />
     <Compile Include="GameInfoTracker.cs" />
     <Compile Include="GUI.cs" />
+    <Compile Include="ILocation.cs" />
     <Compile Include="InfoGenerator.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="LocationInformation.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="LocationMap.cs" />
+    <Compile Include="Misc.cs" />
+    <Compile Include="PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Random.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="Sage.cs" />
+    <Compile Include="Stables.cs" />
+    <Compile Include="Tavern.cs" />
     <Compile Include="Tiles.cs" />
+    <Compile Include="WizardTower.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

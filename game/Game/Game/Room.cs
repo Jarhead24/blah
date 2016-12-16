@@ -9,10 +9,10 @@ namespace Game
 
     class Room
     {
-        private Board boardClass = Board.Instance;
         private Random rand = new Random(Environment.TickCount);
         private int height = Board.height;
         private int width = Board.width;
+        private Tiles[,] boardLayout;
         public int xCenter { get; set; }
         public int yCenter { get; set; }
         public int distanceUp { get; set; }
@@ -21,8 +21,9 @@ namespace Game
         /// <summary>
         /// Room constructor. Will automatically make a random valid room according to the current board.
         /// </summary>
-        public Room()
+        public Room(Tiles[,] bL)
         {
+            boardLayout = bL;
             defineCenterOfRoom();
             int roomHeight = 0;
             int roomWidth = 0;
@@ -82,7 +83,7 @@ namespace Game
             {
                 for (int k = -2; k <= 2; k++)
                 {
-                    if (boardClass.board[y + j, x + k].Symbol != Board.WALL_TILE.Symbol)
+                    if (boardLayout[y + j, x + k].Symbol != Board.WALL_TILE.Symbol)
                     {
                         isValid = false;
                     }
@@ -106,7 +107,7 @@ namespace Game
             {
                 for (int j = -roomHeight; j <= roomHeight; j++)
                 {
-                    if (boardClass.board[j + yCenter, i].Symbol != Board.WALL_TILE.Symbol)
+                    if (boardLayout[j + yCenter, i].Symbol != Board.WALL_TILE.Symbol)
                     {
                         maxRight = Math.Min(maxRight, Math.Abs(xCenter - (i - 1)));
                         break;
@@ -118,7 +119,7 @@ namespace Game
             {
                 for (int j = -roomHeight; j <= roomHeight; j++)
                 {
-                    if (boardClass.board[j + yCenter, i].Symbol != Board.WALL_TILE.Symbol)
+                    if (boardLayout[j + yCenter, i].Symbol != Board.WALL_TILE.Symbol)
                     {
                         maxLeft = Math.Min(maxLeft, Math.Abs(xCenter - (i + 1)));
                         break;
@@ -142,7 +143,7 @@ namespace Game
             {
                 for (int j = -roomWidth; j <= roomWidth; j++)
                 {
-                    if (boardClass.board[i, j + xCenter].Symbol != Board.WALL_TILE.Symbol)
+                    if (boardLayout[i, j + xCenter].Symbol != Board.WALL_TILE.Symbol)
                     {
                         maxDown = Math.Min(maxDown, Math.Abs(yCenter - (i - 1)));
                         break;
@@ -154,7 +155,7 @@ namespace Game
             {
                 for (int j = -roomWidth; j <= roomWidth; j++)
                 {
-                    if (boardClass.board[i, j + xCenter].Symbol != Board.WALL_TILE.Symbol)
+                    if (boardLayout[i, j + xCenter].Symbol != Board.WALL_TILE.Symbol)
                     {
                         maxUp = Math.Min(maxUp, Math.Abs(yCenter - (i + 1)));
                         break;

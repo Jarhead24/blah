@@ -7,20 +7,23 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    class Board
+    class Board : ILocation
     {
         
         public Tiles[,] board;
-        public static int height;
-        public static int width;
-        public static int numberOfRooms;
+        public static int height = 30;
+        public static int width = 100;
+        public static int numberOfRooms = 2;
         public static readonly Tiles WALL_TILE = new Tiles { Symbol = "#", Color = ConsoleColor.Green };
         public static readonly Tiles FLOOR_TILE = new Tiles { Symbol = ".", Color = ConsoleColor.DarkGreen };
         public static readonly Tiles HALL_TILE = new Tiles { Symbol = ".", Color = ConsoleColor.DarkMagenta };
         public static readonly Tiles STAIR_TILE = new Tiles { Symbol = ">", Color = ConsoleColor.Red };
+        public string Name { get; set; }
+        public ConsoleColor TextColor { get; set; }
+        public ConsoleColor BackColor { get; set; }
 
         private static Board instance = null;
-        private Player player = Player.Instance;
+        private PlayerCharacter player = PlayerCharacter.Instance;
         private Random rand = null;
         private List<Room> roomsCreated = new List<Room>();
 
@@ -29,6 +32,9 @@ namespace Game
         /// </summary>
         public Board()
         {
+            Name = "The Endless Dungeon";
+            TextColor = ConsoleColor.Red;
+            BackColor = ConsoleColor.Black;
             rand = new Random(Environment.TickCount);
         }
 
@@ -59,13 +65,13 @@ namespace Game
             height = h;
             width = w;
             numberOfRooms = numRooms;
-            board = new Tiles[h, w];
+            this.board = new Tiles[h, w];
             // Make everything a #
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    board[y, x] = WALL_TILE;
+                    this.board[y, x] = WALL_TILE;
                 }
             }
             for (int i = 0; i < numberOfRooms; i++)
@@ -93,7 +99,7 @@ namespace Game
         /// <summary>
         /// Regenerates the dungeon with the already enter parameters
         /// </summary>
-        public void regenerateBoard()
+        public void regenerateBoard(int numRooms)
         {
             board = new Tiles[height, width];
             roomsCreated.Clear();
@@ -105,7 +111,7 @@ namespace Game
                     board[y, x] = WALL_TILE;
                 }
             }
-            for (int i = 0; i < numberOfRooms; i++)
+            for (int i = 0; i < numRooms; i++)
             {
                 createRoom();
             }
@@ -132,7 +138,7 @@ namespace Game
         /// </summary>
         private void createRoom()
         {
-            Room newRoom = new Room();
+            Room newRoom = new Room(board);
             drawRoom(newRoom);
             roomsCreated.Add(newRoom);
         }
@@ -143,13 +149,13 @@ namespace Game
         /// <param name="room">Random room to put player in</param>
         private void drawPlayer(Room room)
         {
-            Player player = Player.Instance;     
+            PlayerCharacter player = PlayerCharacter.Instance;     
             int randomY = rand.Next(room.yCenter - room.distanceUp, room.yCenter + room.distanceUp + 1);
             int randomX = rand.Next(room.xCenter - room.distanceRight, room.xCenter + room.distanceRight + 1);
             player.xLocation = randomX;
             player.yLocation = randomY;
             player.CurrentTileOn = board[randomY, randomX];
-            board[randomY, randomX] = Player.PLAYER_TILE;
+            board[randomY, randomX] = PlayerCharacter.PLAYER_TILE;
         }
 
         /// <summary>
@@ -236,6 +242,7 @@ namespace Game
         /// </summary>
         public void showBoard()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -263,14 +270,14 @@ namespace Game
             //Check if destination is valid
             if (board[destY, destX].Symbol != WALL_TILE.Symbol)
             {
-                board[destY, destX] = Player.PLAYER_TILE;
-                board[currY, currX] = player.CurrentTileOn;
+                this.board[destY, destX] = PlayerCharacter.PLAYER_TILE;
+                this.board[currY, currX] = player.CurrentTileOn;
                 Console.SetCursorPosition(currX, currY);
                 Console.ForegroundColor = prevTile.Color;
                 Console.Write(prevTile.Symbol);
                 Console.SetCursorPosition(destX, destY);
-                Console.ForegroundColor = Player.PLAYER_TILE.Color;
-                Console.Write(Player.PLAYER_TILE.Symbol);
+                Console.ForegroundColor = PlayerCharacter.PLAYER_TILE.Color;
+                Console.Write(PlayerCharacter.PLAYER_TILE.Symbol);
                 locInfo.changeLocationInformation(destX, destY, destTile);
             }
             Console.SetCursorPosition(width, height);
@@ -279,6 +286,121 @@ namespace Game
                 GameInfoTracker.Instance.currentLevelComplete = true;
             }
             return locInfo;
+        }
+
+
+
+        public bool Exit()
+        {
+            return true;
+        }
+
+        public bool Enter(PlayerCharacter p)
+        {
+            ConsoleKeyInfo keyInfo;
+            Console.Clear();
+            if(this.board == null)
+            {
+                this.createBoard(30, 100, 2);
+            }
+            this.showBoard();
+            drawInitialGUI();
+            while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+            {
+
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        moveUp();
+                        break;
+                    case ConsoleKey.DownArrow:
+                        moveDown();
+                        break;
+                    case ConsoleKey.RightArrow:
+                        moveRight();
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        moveLeft();
+                        break;
+                    default:
+                        break;
+                }
+                if (GameInfoTracker.Instance.currentLevelComplete)
+                {
+                    GameInfoTracker.Instance.levelComplete();
+                    p.Money += GameInfoTracker.Instance.score;
+                    GameInfoTracker.Instance.currentLevelComplete = false;
+                    regenerateDungeon();
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Move player up one space
+        /// </summary>
+        public void moveUp()
+        {
+            PlayerCharacter p = PlayerCharacter.Instance;
+            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation, p.yLocation - 1);
+            p.CurrentTileOn = newLoc.tileOn;
+            p.xLocation = newLoc.xLocation;
+            p.yLocation = newLoc.yLocation;
+        }
+
+        /// <summary>
+        /// Move player down one space
+        /// </summary>
+        public void moveDown()
+        {
+            PlayerCharacter p = PlayerCharacter.Instance;
+            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation, p.yLocation + 1);
+            p.CurrentTileOn = newLoc.tileOn;
+            p.xLocation = newLoc.xLocation;
+            p.yLocation = newLoc.yLocation;
+        }
+
+        /// <summary>
+        /// Move player right one space
+        /// </summary>
+        public void moveRight()
+        {
+            PlayerCharacter p = PlayerCharacter.Instance;
+            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation + 1, p.yLocation);
+            p.CurrentTileOn = newLoc.tileOn;
+            p.xLocation = newLoc.xLocation;
+            p.yLocation = newLoc.yLocation;
+        }
+
+        /// <summary>
+        /// Move player left one space
+        /// </summary>
+        public void moveLeft()
+        {
+            PlayerCharacter p = PlayerCharacter.Instance;
+            LocationInformation newLoc = movePlayer(p.xLocation, p.yLocation, p.xLocation - 1, p.yLocation);
+            p.CurrentTileOn = newLoc.tileOn;
+            p.xLocation = newLoc.xLocation;
+            p.yLocation = newLoc.yLocation;
+        }
+
+        /// <summary>
+        /// Generates a new random dungeon
+        /// </summary>
+        private void regenerateDungeon()
+        {
+            Console.Clear();
+            regenerateBoard(Math.Min(10,GameInfoTracker.Instance.dungeonLevel+1));
+            showBoard();
+            drawInitialGUI();
+        }
+
+        /// <summary>
+        /// Draws the initial GUI
+        /// </summary>
+        private void drawInitialGUI()
+        {
+            GUI.Instance.displayGameInfo();
         }
     }
 }
